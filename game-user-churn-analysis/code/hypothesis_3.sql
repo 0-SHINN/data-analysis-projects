@@ -28,7 +28,7 @@ retained_flag AS (
         did_gacha,
         MAX(
             CASE
-                WHEN DATE_DIFF(DATE(event_time), first_event_date, DAY) BETWEEN 1 AND 7 THEN 1
+                WHEN DATE_DIFF(DATE(event_time), first_event_date, DAY) BETWEEN 7 AND 13 THEN 1
                 ELSE 0
             END
         ) AS retained
