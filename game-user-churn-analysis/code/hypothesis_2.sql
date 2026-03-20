@@ -7,8 +7,8 @@ WITH stage_flag AS (
     SELECT
         user_id,
         MIN(DATE(event_time)) AS first_event_date,
-        MAX(CASE WHEN event_name LIKE 'tutorial_%' THEN 1 ELSE 0 END) > 0 AS did_tutorial,
-        MAX(CASE WHEN event_name LIKE 'stage_%' THEN 1 ELSE 0 END) > 0 AS enter_stage,
+        MAX(CASE WHEN tutorial = '10' THEN 1 ELSE 0 END) > 0 AS clear_tutorial,
+        MAX(CASE WHEN stage IS NOT NULL THEN 1 ELSE 0 END) > 0 AS enter_stage,
         DATE_DIFF(MAX(DATE(event_time)), MIN(DATE(event_time)), DAY) AS active_days
     FROM `game_log`
     GROUP BY user_id
@@ -22,14 +22,14 @@ retained_flag AS (
         active_days,
         MAX(
             CASE
-                WHEN DATE_DIFF(DATE(event_time), s.first_event_date, DAY) BETWEEN 1 AND 7 THEN 1
+                WHEN DATE_DIFF(DATE(event_time), s.first_event_date, DAY) BETWEEN 7 AND 13 THEN 1
                 ELSE 0
             END
         ) AS retained
     FROM stage_flag s
-    LEFT JOIN `game_log` g
-        ON s.user_id = g.user_id
-    WHERE did_tutorial = TRUE
+    LEFT JOIN `game_log` l
+        ON s.user_id = l.user_id
+    WHERE clear_tutorial = TRUE
       AND s.first_event_date >= '2023-06-18'
     GROUP BY s.user_id, enter_stage, active_days
 )
