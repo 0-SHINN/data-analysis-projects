@@ -6,6 +6,7 @@
 WITH stage_seg AS (
     SELECT
         user_id,
+        MIN(DATE(event_time)) AS first_event_date
         CASE
             WHEN MAX(CAST(stage AS INT64)) <= 10 THEN '1-10'
             WHEN MAX(CAST(stage AS INT64)) <= 20 THEN '11-20'
@@ -13,8 +14,7 @@ WITH stage_seg AS (
             WHEN MAX(CAST(stage AS INT64)) <= 40 THEN '31-40'
             ELSE '41-50'
         END AS max_stage,
-        DATE_DIFF(MAX(DATE(event_time)), MIN(DATE(event_time)), DAY) AS active_date,
-        MIN(DATE(event_time)) AS first_event_date
+        DATE_DIFF(MAX(DATE(event_time)), MIN(DATE(event_time)), DAY) AS active_date        
     FROM `game_log`
     WHERE event_name LIKE 'stage_%'
     GROUP BY user_id
@@ -28,13 +28,13 @@ retained_flag AS (
         active_date,
         MAX(
             CASE
-                WHEN DATE_DIFF(DATE(event_time), first_event_date, DAY) BETWEEN 1 AND 7 THEN 1
+                WHEN DATE_DIFF(DATE(event_time), first_event_date, DAY) BETWEEN 7 AND 13 THEN 1
                 ELSE 0
             END
         ) AS retained
     FROM stage_seg s
-    LEFT JOIN `game_log` g
-        ON s.user_id = g.user_id
+    LEFT JOIN `game_log` l
+        ON s.user_id = l.user_id
     WHERE first_event_date >= '2023-06-18'
     GROUP BY user_id, max_stage, active_date
 )
