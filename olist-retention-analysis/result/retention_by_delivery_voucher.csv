@@ -1,0 +1,5 @@
+user_segment,total_users,retention_rate,avg_review_score
+late & no_voucher,5499,1.02,2.2
+late & voucher,194,1.03,2.19
+on_time & no_voucher,66716,1.31,4.27
+on_time & voucher,2714,1.66,4.24

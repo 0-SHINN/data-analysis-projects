@@ -1,0 +1,3 @@
+cohort_month,retention_rate,avg_delay_days,delivery_late_rate,shipping_late_rate,avg_freight_ratio,consumable_rate,avg_review_score,voucher_use_rate,avg_installments,avg_item_count,avg_category_count
+2017-09,1.82,-11.33,4.37,3.37,29.49,17.26,4.26,4.15,3.06,1.14,0.99
+2017-12,1.01,-13.01,7.46,5.99,28.75,15.83,4.09,3.84,2.91,1.12,0.98
